@@ -1,0 +1,15 @@
+{
+  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "lib": ["ESNext", "DOM"],
+    "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES6",
+    "declaration": true,
+    "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true
+  }
+}
