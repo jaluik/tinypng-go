@@ -3,11 +3,11 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "noImplicitAny": false,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext"],
     "outDir": "dist",
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "target": "ES6",
+    "target": "ESNext",
     "declaration": true,
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true
