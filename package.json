@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "A cli util to compress image",
   "main": "dist/index.js",
-  "type": "module",
   "scripts": {
     "dev": "tsc -w  --sourceMap",
     "test": "jest --collectCoverage",
