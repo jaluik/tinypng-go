@@ -66,10 +66,7 @@ export const findAllImageFile = (sourcePath) => {
             if (err) {
               reject(err);
             }
-            if (
-              stats.isDirectory() &&
-              !['node_modules', '.git'].includes(fileName)
-            ) {
+            if (stats.isDirectory()) {
               traversePath(filePath);
             }
             if (stats.isFile()) {
