@@ -47,6 +47,11 @@ const canHandledImage = (fileName: string) => {
   return fileName.endsWith('.png') || fileName.endsWith('.jpg');
 };
 
+/**
+ *
+ * @param sourcePath compelete path
+ * @returns
+ */
 export const findAllImageFile = (sourcePath) => {
   const toCompressList = [];
   let depth = 0;

@@ -46,7 +46,13 @@ class TinyPng {
     this.pendingList = list;
   }
 
-  async compressSinglePic(sourcePath, distpath) {
+  /**
+   * compress a image file and save it
+   * @param sourcePath source image file path
+   * @param distpath compressed image file dist path
+   * @returns distpath
+   */
+  async compressSinglePic(sourcePath: string, distpath: string) {
     const res = await this.uploadSinglePic(sourcePath);
     const imgUrl = res.output.url;
     if (imgUrl) {
@@ -55,6 +61,11 @@ class TinyPng {
     }
   }
 
+  /**
+   * upload a  image
+   * @param path source image path
+   * @returns promise with upload result
+   */
   async uploadSinglePic(path: string): Promise<UploadRes> {
     return new Promise((resolve, reject) => {
       readFile(path, (err, file) => {
@@ -78,6 +89,12 @@ class TinyPng {
     });
   }
 
+  /**
+   * download image from tiny.png
+   * @param address image url to download
+   * @param distPath the path image to be saved
+   * @returns distPath
+   */
   downloadSingleImg(address, distPath: string) {
     const opts = new URL(address);
     const write = createWriteStream(distPath, {
