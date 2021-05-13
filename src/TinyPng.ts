@@ -1,21 +1,26 @@
 import { randomRequestOption } from './utils';
-import { readFile, createWriteStream } from 'fs-extra';
+import { readFile, createWriteStream, ensureFile } from 'fs-extra';
+import AsyncTaskQueue from './AsyncTaskQueue';
 import { request } from 'https';
 import { URL } from 'url';
 
 interface SuccessItem {
   path: string;
+  distPath: string;
   originSize: number;
   compressedSize: number;
 }
 
 interface FailedItem {
   path: string;
+  distPath: string;
+  originSize: number;
   errMsg: string;
 }
 
 interface PendingItem {
   path: string;
+  distPath: string;
   originSize: number;
 }
 
@@ -35,15 +40,39 @@ class TinyPng {
   private pendingList: PendingItem[];
   private successList: SuccessItem[];
   private failedList: FailedItem[];
+  private asyncTaskQueue: AsyncTaskQueue;
 
-  constructor() {
+  constructor(maxTasks = 10) {
     this.pendingList = [];
     this.successList = [];
     this.failedList = [];
+    this.asyncTaskQueue = new AsyncTaskQueue(maxTasks);
   }
 
   setPendingList(list) {
     this.pendingList = list;
+  }
+
+  async run() {
+    return new Promise((resolve) => {
+      const taskFnQuene = this.pendingList.map((item) => async () => {
+        try {
+          const res = await this.compressSinglePic(item.path, item.distPath);
+          this.successList.push({
+            ...item,
+            compressedSize: res.output.size,
+          });
+        } catch (err) {
+          this.failedList.push({ ...item, errMsg: err.msg });
+        }
+      });
+      this.asyncTaskQueue.setAsyncFnTasks(taskFnQuene);
+      this.asyncTaskQueue.setFinishCallback(() => {
+        this.printResult();
+        resolve(void 0);
+      });
+      this.asyncTaskQueue.run();
+    });
   }
 
   /**
@@ -54,10 +83,13 @@ class TinyPng {
    */
   async compressSinglePic(sourcePath: string, distpath: string) {
     const res = await this.uploadSinglePic(sourcePath);
+    console.log(`${sourcePath}上传完成`);
+
     const imgUrl = res.output.url;
     if (imgUrl) {
-      const path = await this.downloadSingleImg(imgUrl, distpath);
-      return path;
+      await this.downloadSingleImg(imgUrl, distpath);
+      console.log(`${sourcePath}下载完成`);
+      return res;
     }
   }
 
@@ -97,21 +129,43 @@ class TinyPng {
    */
   downloadSingleImg(address, distPath: string) {
     const opts = new URL(address);
-    const write = createWriteStream(distPath, {
-      encoding: 'binary',
-      flags: 'w',
-    });
-    return new Promise((resolve, reject) => {
-      const req = request(opts, (res) => {
-        res.setEncoding('binary');
-        res.pipe(write);
-        res.on('end', () => {
-          resolve(distPath);
-        });
+    ensureFile(distPath).then(() => {
+      const write = createWriteStream(distPath, {
+        encoding: 'binary',
+        flags: 'w',
       });
-      req.on('error', (error) => reject(error));
-      req.end();
+      return new Promise((resolve, reject) => {
+        const req = request(opts, (res) => {
+          res.setEncoding('binary');
+          res.pipe(write);
+          res.on('end', () => {
+            resolve(distPath);
+          });
+        });
+        req.on('error', (error) => reject(error));
+        req.end();
+      });
     });
+  }
+
+  printResult() {
+    const originTotalSize = this.successList.reduce(
+      (prev, item) => prev + item.originSize,
+      0
+    );
+    const compressedTotalSize = this.successList.reduce(
+      (prev, item) => prev + item.compressedSize,
+      0
+    );
+    if (originTotalSize > 0) {
+      const text = `originTotalSize is ${originTotalSize} byte, compressedTotalSize is ${compressedTotalSize} byte, the compressRatio is ${(
+        ((originTotalSize - compressedTotalSize) * 100) /
+        originTotalSize
+      ).toFixed(2)}%`;
+      console.log(text);
+    } else {
+      console.log('no compressed images!');
+    }
   }
 }
 

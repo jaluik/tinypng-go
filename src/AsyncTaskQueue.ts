@@ -3,6 +3,7 @@ type PromiseTask = () => Promise<any>;
 class AsyncTaskQueue {
   private asyncFnTasks: PromiseTask[];
   private maxTasks: number;
+  private finishCallback: Function;
   private taskIndex: number;
 
   constructor(maxTasks) {
@@ -15,31 +16,39 @@ class AsyncTaskQueue {
     this.asyncFnTasks = asyncFnTasks.map(
       (task, index) => () =>
         task().then((res) => {
-          this.onFinishOneTask(index);
+          // this.onFinishOneTask(index);
           this.enqueTask();
           return res;
         })
     );
   }
 
-  onFinishOneTask(finishIndex: number) {
-    console.log('finishIndex', finishIndex);
-    if (finishIndex === this.asyncFnTasks.length - 1) {
-      this.onFinishAllTask();
-    }
+  // onFinishOneTask(finishIndex: number) {
+  //   console.log('finishIndex', finishIndex);
+  //   if (finishIndex === this.asyncFnTasks.length - 1) {
+  //     this.onFinishAllTask();
+  //   }
+  // }
+
+  setFinishCallback(fn) {
+    this.finishCallback = fn;
   }
 
   onFinishAllTask() {
-    console.log('finishAllIndex');
+    if (this.finishCallback) {
+      this.finishCallback();
+    }
   }
 
   enqueTask() {
     if (this.taskIndex < this.asyncFnTasks.length - 1) {
       this.asyncFnTasks[this.taskIndex++]();
+    } else {
+      this.onFinishAllTask();
     }
   }
 
-  init() {
+  run() {
     const tasks = this.asyncFnTasks.slice(0, this.maxTasks);
     this.taskIndex = this.maxTasks - 1;
     tasks.forEach((fn) => fn());

@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsc -w  --sourceMap",
+    "debug": "node ./dist/index.js",
     "test": "jest --collectCoverage",
     "build": "rimraf ./dist && tsc"
   },
