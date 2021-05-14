@@ -94,7 +94,7 @@ class TinyPng {
   }
 
   /**
-   * upload a  image
+   * upload a image
    * @param path source image path
    * @returns promise with upload result
    */
@@ -148,6 +148,9 @@ class TinyPng {
     });
   }
 
+  /**
+   * print the result, inlude originTotalSize, compressedTotalSize, compressRatio
+   */
   printResult() {
     const originTotalSize = this.successList.reduce(
       (prev, item) => prev + item.originSize,
@@ -157,11 +160,12 @@ class TinyPng {
       (prev, item) => prev + item.compressedSize,
       0
     );
+    const compressRatio = (
+      ((originTotalSize - compressedTotalSize) * 100) /
+      originTotalSize
+    ).toFixed(2);
     if (originTotalSize > 0) {
-      const text = `originTotalSize is ${originTotalSize} byte, compressedTotalSize is ${compressedTotalSize} byte, the compressRatio is ${(
-        ((originTotalSize - compressedTotalSize) * 100) /
-        originTotalSize
-      ).toFixed(2)}%`;
+      const text = `originTotalSize is ${originTotalSize} byte, compressedTotalSize is ${compressedTotalSize} byte, the compressRatio is ${compressRatio}%`;
       console.log(text);
     } else {
       console.log('no compressed images!');
