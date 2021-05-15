@@ -9,6 +9,8 @@
 # production
 /build
 /dist
+/images
+/images_out
 
 
 
