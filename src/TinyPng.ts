@@ -3,6 +3,7 @@ import { readFile, createWriteStream, ensureFile } from 'fs-extra';
 import AsyncTaskQueue from './AsyncTaskQueue';
 import { request } from 'https';
 import { URL } from 'url';
+const ProgressBar = require('progress');
 
 interface SuccessItem {
   path: string;
@@ -54,6 +55,12 @@ class TinyPng {
   }
 
   async run() {
+    const bar = new ProgressBar('  compressing [:bar] :percent :etas', {
+      complete: '=',
+      incomplete: ' ',
+      width: 20,
+      total: this.pendingList.length,
+    });
     return new Promise((resolve) => {
       const taskFnQuene = this.pendingList.map((item) => async () => {
         try {
@@ -62,8 +69,11 @@ class TinyPng {
             ...item,
             compressedSize: res.output.size,
           });
+          bar.tick();
         } catch (err) {
-          this.failedList.push({ ...item, errMsg: err.msg });
+          bar.tick();
+          const errMsg = typeof err === 'string' ? err : (err || {}).msg;
+          this.failedList.push({ ...item, errMsg });
         }
       });
       this.asyncTaskQueue.setAsyncFnTasks(taskFnQuene);
@@ -83,12 +93,9 @@ class TinyPng {
    */
   async compressSinglePic(sourcePath: string, distpath: string) {
     const res = await this.uploadSinglePic(sourcePath);
-    console.log(`${sourcePath}上传完成`);
-
     const imgUrl = res.output.url;
     if (imgUrl) {
       await this.downloadSingleImg(imgUrl, distpath);
-      console.log(`${sourcePath}下载完成`);
       return res;
     }
   }
@@ -165,7 +172,13 @@ class TinyPng {
       originTotalSize
     ).toFixed(2);
     if (originTotalSize > 0) {
-      const text = `originTotalSize is ${originTotalSize} byte, compressedTotalSize is ${compressedTotalSize} byte, the compressRatio is ${compressRatio}%`;
+      const text = `
+      success num is ${this.successList.length},
+      failed num is ${this.failedList.length},
+      originTotalSize is ${originTotalSize} byte,
+      compressedTotalSize is ${compressedTotalSize} byte,
+      the compressRatio is ${compressRatio}%
+      `;
       console.log(text);
     } else {
       console.log('no compressed images!');

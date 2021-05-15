@@ -35,19 +35,16 @@ class AsyncTaskQueue {
   }
 
   enqueTask() {
-    if (this.taskIndex < this.asyncFnTasks.length - 1) {
-      this.asyncFnTasks[++this.taskIndex]();
-    } else if (this.finished) {
+    if (++this.taskIndex < this.asyncFnTasks.length) {
+      this.asyncFnTasks[this.taskIndex]();
+    } else if (!this.finished) {
       this.onFinishAllTask();
-    } else {
       this.finished = true;
     }
   }
 
   run() {
-    const initCount = Math.min(this.maxTasks, this.asyncFnTasks.length);
-    const tasks = this.asyncFnTasks.slice(0, initCount);
-    this.taskIndex = initCount - 1;
+    const tasks = this.asyncFnTasks.slice(0, this.maxTasks);
     tasks.forEach((fn) => fn());
   }
 

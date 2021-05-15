@@ -18,7 +18,7 @@ describe('test AsyncTaskQueue', () => {
     const fnList = new Array(7).fill(1).map(() => () => fn());
     const queue = new AsyncTaskQueue(3);
     queue.setAsyncFnTasks(fnList);
-    queue.init();
+    queue.run();
     setTimeout(() => {
       done();
     }, 1000);
