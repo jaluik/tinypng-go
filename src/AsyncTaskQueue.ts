@@ -14,21 +14,13 @@ class AsyncTaskQueue {
 
   setAsyncFnTasks(asyncFnTasks: PromiseTask[]) {
     this.asyncFnTasks = asyncFnTasks.map(
-      (task, index) => () =>
+      (task) => () =>
         task().then((res) => {
-          // this.onFinishOneTask(index);
           this.enqueTask();
           return res;
         })
     );
   }
-
-  // onFinishOneTask(finishIndex: number) {
-  //   console.log('finishIndex', finishIndex);
-  //   if (finishIndex === this.asyncFnTasks.length - 1) {
-  //     this.onFinishAllTask();
-  //   }
-  // }
 
   setFinishCallback(fn) {
     this.finishCallback = fn;
@@ -41,7 +33,7 @@ class AsyncTaskQueue {
   }
 
   enqueTask() {
-    if (this.taskIndex < this.asyncFnTasks.length - 1) {
+    if (this.taskIndex <= this.asyncFnTasks.length - 1) {
       this.asyncFnTasks[this.taskIndex++]();
     } else {
       this.onFinishAllTask();

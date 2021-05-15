@@ -1,5 +1,5 @@
 import { readdir, stat } from 'fs-extra';
-import { join, extname } from 'path';
+import { join, resolve } from 'path';
 
 const TINYIMG_URL = ['tinyjpg.com', 'tinypng.com'];
 
@@ -52,7 +52,9 @@ const canHandledImage = (fileName: string) => {
  * @param sourcePath compelete path
  * @returns
  */
-export const findAllImageFile = (sourcePath) => {
+export const findAllImageFile = (
+  sourcePath
+): Promise<{ path: string; originSize: number }[]> => {
   const toCompressList = [];
   let depth = 0;
   return new Promise((resolve, reject) => {
@@ -90,4 +92,13 @@ export const findAllImageFile = (sourcePath) => {
       });
     })(sourcePath);
   });
+};
+
+/**
+ * get full path from relative path
+ * @param path relative path
+ * @returns full path
+ */
+export const getFullPath = (path: string): string => {
+  return resolve(process.cwd(), path);
 };
