@@ -4,7 +4,7 @@
   "description": "A cli util to compress image",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsc -w  --sourceMap",
+    "dev": "rimraf ./dist && tsc -w  --sourceMap",
     "debug": "node ./dist/index.js",
     "test": "jest --collectCoverage",
     "build": "rimraf ./dist && tsc"

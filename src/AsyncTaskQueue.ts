@@ -5,11 +5,13 @@ class AsyncTaskQueue {
   private maxTasks: number;
   private finishCallback: Function;
   private taskIndex: number;
+  private finished: boolean;
 
   constructor(maxTasks) {
     this.asyncFnTasks = [];
     this.maxTasks = maxTasks;
     this.taskIndex = 0;
+    this.finished = false;
   }
 
   setAsyncFnTasks(asyncFnTasks: PromiseTask[]) {
@@ -33,16 +35,19 @@ class AsyncTaskQueue {
   }
 
   enqueTask() {
-    if (this.taskIndex <= this.asyncFnTasks.length - 1) {
-      this.asyncFnTasks[this.taskIndex++]();
-    } else {
+    if (this.taskIndex < this.asyncFnTasks.length - 1) {
+      this.asyncFnTasks[++this.taskIndex]();
+    } else if (this.finished) {
       this.onFinishAllTask();
+    } else {
+      this.finished = true;
     }
   }
 
   run() {
-    const tasks = this.asyncFnTasks.slice(0, this.maxTasks);
-    this.taskIndex = this.maxTasks - 1;
+    const initCount = Math.min(this.maxTasks, this.asyncFnTasks.length);
+    const tasks = this.asyncFnTasks.slice(0, initCount);
+    this.taskIndex = initCount - 1;
     tasks.forEach((fn) => fn());
   }
 

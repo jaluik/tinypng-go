@@ -36,6 +36,7 @@ import { getFullPath, findAllImageFile } from './utils';
               },
             ];
           }
+
           const tinyPng = new TinyPng(max);
           tinyPng.setPendingList(pendingList);
           tinyPng.run();
