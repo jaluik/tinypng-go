@@ -1,2 +1,3 @@
 # tinypng-go
-A cli util to quick compress image.
+
+A cli util to compress image quickly.
