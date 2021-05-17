@@ -173,11 +173,11 @@ class TinyPng {
     ).toFixed(2);
     if (originTotalSize > 0) {
       const text = `
-      success num is ${this.successList.length},
-      failed num is ${this.failedList.length},
-      originTotalSize is ${originTotalSize} byte,
-      compressedTotalSize is ${compressedTotalSize} byte,
-      the compressRatio is ${compressRatio}%
+success num is ${this.successList.length},
+failed num is ${this.failedList.length},
+originTotalSize is ${originTotalSize} byte,
+compressedTotalSize is ${compressedTotalSize} byte,
+the compressRatio is ${compressRatio}%
       `;
       console.log(text);
     } else {
