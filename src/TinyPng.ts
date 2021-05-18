@@ -4,6 +4,7 @@ import AsyncTaskQueue from './AsyncTaskQueue';
 import { request } from 'https';
 import { URL } from 'url';
 const ProgressBar = require('progress');
+const chalk = require('chalk');
 
 interface SuccessItem {
   path: string;
@@ -37,6 +38,8 @@ interface UploadRes {
   };
 }
 
+const log = console.log;
+
 class TinyPng {
   private pendingList: PendingItem[];
   private successList: SuccessItem[];
@@ -55,12 +58,16 @@ class TinyPng {
   }
 
   async run() {
-    const bar = new ProgressBar('  compressing [:bar] :percent :etas', {
-      complete: '=',
-      incomplete: ' ',
-      width: 20,
-      total: this.pendingList.length,
-    });
+    this.printStart();
+    const bar = new ProgressBar(
+      'compressing [:bar] :percent :current/:total :etas',
+      {
+        complete: '=',
+        incomplete: ' ',
+        width: 20,
+        total: this.pendingList.length,
+      }
+    );
     return new Promise((resolve) => {
       const taskFnQuene = this.pendingList.map((item) => async () => {
         try {
@@ -109,7 +116,7 @@ class TinyPng {
     return new Promise((resolve, reject) => {
       readFile(path, (err, file) => {
         if (err) {
-          console.log('err', err);
+          log('err', err);
           reject(err);
         }
         const options = randomRequestOption();
@@ -155,6 +162,12 @@ class TinyPng {
     });
   }
 
+  printStart() {
+    log(chalk`
+Total File: {green  ${this.pendingList.length}}
+    `);
+  }
+
   /**
    * print the result, inlude originTotalSize, compressedTotalSize, compressRatio
    */
@@ -172,16 +185,14 @@ class TinyPng {
       originTotalSize
     ).toFixed(2);
     if (originTotalSize > 0) {
-      const text = `
-success num is ${this.successList.length},
-failed num is ${this.failedList.length},
-originTotalSize is ${originTotalSize} byte,
-compressedTotalSize is ${compressedTotalSize} byte,
-the compressRatio is ${compressRatio}%
+      const text = chalk`
+SUCCESS: {green ${this.successList.length}},
+FAILED: {red ${this.failedList.length}},
+COMPRESS_RATIO: {yellow ${compressRatio}%}
       `;
-      console.log(text);
+      log(text);
     } else {
-      console.log('no compressed images!');
+      log('no compressed images!');
     }
   }
 }
