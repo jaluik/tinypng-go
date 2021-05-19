@@ -1,7 +1,7 @@
 {
   "name": "tinypng-go",
   "version": "0.0.2",
-  "description": "A cli util to compress image quickly",
+  "description": "A cli tool to compress image quickly",
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "scripts": {

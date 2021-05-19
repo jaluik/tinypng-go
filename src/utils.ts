@@ -40,7 +40,7 @@ export const randomRequestOption = () => {
   };
 };
 
-const canHandledImage = (fileName: string) => {
+export const canHandledImage = (fileName: string) => {
   if (!fileName) {
     return false;
   }
@@ -65,30 +65,31 @@ export const findAllImageFile = (
         if (err) {
           reject(err);
         }
-        fileNames.forEach((fileName) => {
-          const filePath = join(path, fileName);
-          depth++;
-          stat(filePath, (err, stats) => {
-            depth--;
-            if (err) {
-              reject(err);
-            }
-            if (stats.isDirectory()) {
-              traversePath(filePath);
-            }
-            if (stats.isFile()) {
-              if (canHandledImage(fileName)) {
-                toCompressList.push({
-                  path: filePath,
-                  originSize: stats.size,
-                });
+        fileNames &&
+          fileNames.forEach((fileName) => {
+            const filePath = join(path, fileName);
+            depth++;
+            stat(filePath, (err, stats) => {
+              depth--;
+              if (err) {
+                reject(err);
               }
-            }
-            if (depth === 0) {
-              resolve(toCompressList);
-            }
+              if (stats.isDirectory()) {
+                traversePath(filePath);
+              }
+              if (stats.isFile()) {
+                if (canHandledImage(fileName)) {
+                  toCompressList.push({
+                    path: filePath,
+                    originSize: stats.size,
+                  });
+                }
+              }
+              if (depth === 0) {
+                resolve(toCompressList);
+              }
+            });
           });
-        });
       });
     })(sourcePath);
   });
