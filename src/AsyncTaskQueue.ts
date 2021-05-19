@@ -3,21 +3,23 @@ type PromiseTask = () => Promise<any>;
 class AsyncTaskQueue {
   private asyncFnTasks: PromiseTask[];
   private maxTasks: number;
+  private jobIndex: number;
   private finishCallback: Function;
-  private taskIndex: number;
-  private finished: boolean;
+  private finishedTaskNum: number;
 
   constructor(maxTasks) {
     this.asyncFnTasks = [];
     this.maxTasks = maxTasks;
-    this.taskIndex = 0;
-    this.finished = false;
+    this.jobIndex = 0;
+    this.finishedTaskNum = 0;
   }
 
   setAsyncFnTasks(asyncFnTasks: PromiseTask[]) {
     this.asyncFnTasks = asyncFnTasks.map(
       (task) => () =>
         task().then((res) => {
+          this.finishedTaskNum++;
+          this.jobIndex++;
           this.enqueTask();
           return res;
         })
@@ -35,22 +37,26 @@ class AsyncTaskQueue {
   }
 
   enqueTask() {
-    if (++this.taskIndex < this.asyncFnTasks.length) {
-      this.asyncFnTasks[this.taskIndex]();
-    } else if (!this.finished) {
+    if (this.finishedTaskNum < this.asyncFnTasks.length) {
+      if (this.jobIndex < this.asyncFnTasks.length) {
+        this.asyncFnTasks[this.jobIndex]();
+      }
+    } else {
       this.onFinishAllTask();
-      this.finished = true;
     }
   }
 
   run() {
-    const tasks = this.asyncFnTasks.slice(0, this.maxTasks);
+    const initCount = Math.min(this.maxTasks, this.asyncFnTasks.length);
+    const tasks = this.asyncFnTasks.slice(0, initCount);
+    this.jobIndex = initCount - 1;
     tasks.forEach((fn) => fn());
   }
 
   clear() {
     this.asyncFnTasks = [];
-    this.taskIndex = 0;
+    this.finishedTaskNum = 0;
+    this.jobIndex = 0;
   }
 }
 

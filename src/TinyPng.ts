@@ -62,7 +62,7 @@ class TinyPng {
     const bar = new ProgressBar(
       'compressing [:bar] :percent :current/:total :etas',
       {
-        complete: '=',
+        complete: chalk.green('#'),
         incomplete: ' ',
         width: 20,
         total: this.pendingList.length,
@@ -186,8 +186,8 @@ Total File: {green  ${this.pendingList.length}}
     ).toFixed(2);
     if (originTotalSize > 0) {
       const text = chalk`
-SUCCESS: {green ${this.successList.length}},
-FAILED: {red ${this.failedList.length}},
+SUCCESS: {green ${this.successList.length}}
+FAILED: {red ${this.failedList.length}}
 COMPRESS_RATIO: {yellow ${compressRatio}%}
       `;
       log(text);
