@@ -60,7 +60,7 @@ class TinyPng {
   async run() {
     this.printStart();
     const bar = new ProgressBar(
-      'compressing [:bar] :percent :current/:total :etas',
+      'compressing [:bar] :percent :current/:total :etas left',
       {
         complete: chalk.green('#'),
         incomplete: ' ',
@@ -86,6 +86,9 @@ class TinyPng {
       this.asyncTaskQueue.setAsyncFnTasks(taskFnQuene);
       this.asyncTaskQueue.setFinishCallback(() => {
         this.printResult();
+        if (this.failedList.length > 0) {
+          this.printFailed();
+        }
         resolve(void 0);
       });
       this.asyncTaskQueue.run();
@@ -164,7 +167,7 @@ class TinyPng {
 
   printStart() {
     log(chalk`
-Total File: {green  ${this.pendingList.length}}
+ {green Total File: ${this.pendingList.length}}
     `);
   }
 
@@ -192,8 +195,24 @@ COMPRESS_RATIO: {yellow ${compressRatio}%}
       `;
       log(text);
     } else {
-      log('no compressed images!');
+      log(
+        chalk.red(`
+no compressed images!`)
+      );
     }
+  }
+
+  printFailed() {
+    const text = this.failedList
+      .map((item) => {
+        return chalk`{red  ${item.path}}: {red  ${item.errMsg}}
+`;
+      })
+      .join('');
+    log(chalk`
+{yellow  Faild File: ${this.failedList.length}}
+    `);
+    log(text);
   }
 }
 

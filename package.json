@@ -1,12 +1,12 @@
 {
   "name": "tinypng-go",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A cli tool to compress image quickly",
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "scripts": {
     "dev": "rimraf ./dist && tsc -w  --sourceMap",
-    "debug": "./dist/index.js ./images -o images_out -m 2",
+    "debug": "./dist/index.js ./images -o images_out -m 20",
     "test": "jest --collectCoverage",
     "build": "rimraf ./dist && tsc"
   },
