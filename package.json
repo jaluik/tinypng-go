@@ -1,6 +1,6 @@
 {
   "name": "tinypng-go",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A cli tool to compress image quickly",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -40,5 +40,10 @@
     "commander": "^7.2.0",
     "fs-extra": "^10.0.0",
     "progress": "^2.0.3"
-  }
+  },
+  "keywords": [
+    "tinypng",
+    "compress images",
+    "cli"
+  ]
 }
