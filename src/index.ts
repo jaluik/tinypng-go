@@ -8,10 +8,10 @@ import { getFullPath, findAllImageFile } from './utils';
 (function main() {
   const program = new Command();
   program
-    .version('0.1.0', '-v, --version', 'output the current version')
+    .version('0.1.0', '-v, --version', 'display help for command')
     .arguments('<file>')
     .option('-o, --output <output>', 'set output path')
-    .option('-m, --max [max]', 'set max handled count')
+    .option('-m, --max [max]', 'max tasks on the taskQueue')
     .description('A cli util to compress image', {
       file: 'input file path',
     })
