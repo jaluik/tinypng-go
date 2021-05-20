@@ -69,7 +69,7 @@ class TinyPng {
       }
     );
     return new Promise((resolve) => {
-      const taskFnQuene = this.pendingList.map((item) => async () => {
+      const taskFnQueue = this.pendingList.map((item) => async () => {
         try {
           const res = await this.compressSinglePic(item.path, item.distPath);
           this.successList.push({
@@ -83,7 +83,7 @@ class TinyPng {
           this.failedList.push({ ...item, errMsg });
         }
       });
-      this.asyncTaskQueue.setAsyncFnTasks(taskFnQuene);
+      this.asyncTaskQueue.setAsyncFnTasks(taskFnQueue);
       this.asyncTaskQueue.setFinishCallback(() => {
         this.printResult();
         if (this.failedList.length > 0) {
@@ -166,13 +166,13 @@ class TinyPng {
   }
 
   printStart() {
-    log(chalk`
- {green Total File: ${this.pendingList.length}}
+    log(chalk.green`
+Total File: ${this.pendingList.length}
     `);
   }
 
   /**
-   * print the result, inlude originTotalSize, compressedTotalSize, compressRatio
+   * print the result, include originTotalSize, compressedTotalSize, compressRatio
    */
   printResult() {
     const originTotalSize = this.successList.reduce(
@@ -197,7 +197,7 @@ COMPRESS_RATIO: {yellow ${compressRatio}%}
     } else {
       log(
         chalk.red(`
-no compressed images!`)
+No compressed images!`)
       );
     }
   }
@@ -209,8 +209,8 @@ no compressed images!`)
 `;
       })
       .join('');
-    log(chalk`
-{yellow  Faild File: ${this.failedList.length}}
+    log(chalk.yellow`
+Failed File: ${this.failedList.length}
     `);
     log(text);
   }

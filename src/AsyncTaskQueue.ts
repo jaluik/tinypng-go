@@ -20,7 +20,7 @@ class AsyncTaskQueue {
         task().then((res) => {
           this.finishedTaskNum++;
           this.jobIndex++;
-          this.enqueTask();
+          this.enqueueTask();
           return res;
         })
     );
@@ -36,7 +36,7 @@ class AsyncTaskQueue {
     }
   }
 
-  enqueTask() {
+  enqueueTask() {
     if (this.finishedTaskNum < this.asyncFnTasks.length) {
       if (this.jobIndex < this.asyncFnTasks.length) {
         this.asyncFnTasks[this.jobIndex]();

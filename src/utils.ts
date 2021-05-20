@@ -4,7 +4,7 @@ import { join, resolve } from 'path';
 const TINYIMG_URL = ['tinyjpg.com', 'tinypng.com'];
 
 /**
- * generate random X-Forward-For to avoid  to be forbiden by tinypng.com
+ * generate random X-Forward-For to avoid  to be forbidden by tinypng.com
  * @returns random headers
  */
 export const randomHeader = () => {
@@ -49,7 +49,7 @@ export const canHandledImage = (fileName: string) => {
 
 /**
  *
- * @param sourcePath compelete path
+ * @param sourcePath complete path
  * @returns
  */
 export const findAllImageFile = (
