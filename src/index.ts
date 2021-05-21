@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { fstat, stat } from 'fs-extra';
+import { stat } from 'fs-extra';
 import TinyPng from './TinyPng';
 import { getFullPath, findAllImageFile } from './utils';
+const packageJson = require('../package.json');
 
 (function main() {
   const program = new Command();
   program
-    .version('0.1.0', '-v, --version', 'display help for command')
+    .version(packageJson.version, '-v, --version', 'display version')
     .arguments('<file>')
     .option('-o, --output <output>', 'set output path')
     .option('-m, --max [max]', 'max tasks on the taskQueue')

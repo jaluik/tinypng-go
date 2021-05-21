@@ -41,11 +41,13 @@ yarn global add tinypng-go
 `tinypng-go [filename|directory] [OPTIONS]`
 
 ```
--v, --version          display help for command
+-v, --version          display version
 -o, --output <output>  set output path
 -m, --max [max]        max tasks on the taskQueue(the max bigger, the faster)
 -h, --help             display help for command
 ```
+
+**if you set max a big number,tasks will run faster, but the memory will cost more.**
 
 ### example
 
