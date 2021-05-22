@@ -19,7 +19,7 @@ You can globally install this tool or use npx.
 ### npx
 
 ```sh
-npx tinypng-go <filename or dirname>
+npx tinypng-go <filename or dirname> [OPTIONS]
 ```
 
 ### global install
@@ -36,15 +36,21 @@ npm install -g tinypng-go
 yarn global add tinypng-go
 ```
 
-## USAGE
-
-`tinypng-go [filename|directory] [OPTIONS]`
+check if you have installed
 
 ```
--v, --version          display version
+tinypng-go -v
+```
+
+## USAGE
+
+`tinypng-go <filename or directory> [OPTIONS]`
+
+```
+-v, --version          show current version
 -o, --output <output>  set output path
--m, --max [max]        max tasks on the taskQueue(the max bigger, the faster)
--h, --help             display help for command
+-m, --max [max]        max async compress tasks(The higher the number, the faster the speed)
+-h, --help             show help for command
 ```
 
 **if you set max a big number,tasks will run faster, but the memory will cost more.**

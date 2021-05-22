@@ -9,11 +9,11 @@ const packageJson = require('../package.json');
 (function main() {
   const program = new Command();
   program
-    .version(packageJson.version, '-v, --version', 'display version')
+    .version(packageJson.version, '-v, --version', 'how current version')
     .arguments('<file>')
     .option('-o, --output <output>', 'set output path')
-    .option('-m, --max [max]', 'max tasks on the taskQueue')
-    .description('A cli util to compress image', {
+    .option('-m, --max [max]', 'max async compress tasks')
+    .description('A cli tool to compress image', {
       file: 'input file path',
     })
     .action((file, options) => {
