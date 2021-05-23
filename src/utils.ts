@@ -44,7 +44,11 @@ export const canHandledImage = (fileName: string) => {
   if (!fileName) {
     return false;
   }
-  return fileName.endsWith('.png') || fileName.endsWith('.jpg');
+  return (
+    fileName.endsWith('.png') ||
+    fileName.endsWith('.jpg') ||
+    fileName.endsWith('.jpeg')
+  );
 };
 
 /**
