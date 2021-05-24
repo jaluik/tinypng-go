@@ -1,4 +1,4 @@
-import { randomRequestOption } from './utils';
+import { randomRequestOption, markImageBeCompressed } from './utils';
 import { readFile, createWriteStream, ensureFile } from 'fs-extra';
 import AsyncTaskQueue from './AsyncTaskQueue';
 import { request } from 'https';
@@ -20,7 +20,7 @@ interface FailedItem {
   errMsg: string;
 }
 
-interface PendingItem {
+export interface PendingItem {
   path: string;
   distPath: string;
   originSize: number;
@@ -154,8 +154,9 @@ class TinyPng {
       return new Promise((resolve, reject) => {
         const req = request(opts, (res) => {
           res.setEncoding('binary');
-          res.pipe(write);
+          res.pipe(write, { end: false });
           res.on('end', () => {
+            markImageBeCompressed(write);
             resolve(distPath);
           });
         });

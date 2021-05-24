@@ -1,4 +1,4 @@
-import { readdir, stat } from 'fs-extra';
+import { readdir, stat, WriteStream, readFile } from 'fs-extra';
 import { join, resolve } from 'path';
 
 const TINYIMG_URL = ['tinyjpg.com', 'tinypng.com'];
@@ -106,4 +106,26 @@ export const findAllImageFile = (
  */
 export const getFullPath = (path: string): string => {
   return resolve(process.cwd(), path);
+};
+
+const MARK_TAG = 'tiny';
+
+export const markImageBeCompressed = (writeStream: WriteStream): void => {
+  writeStream.end(Buffer.from(MARK_TAG));
+};
+
+export const judgeImageIsCompressed = (filePath) => {
+  return new Promise((resolve) => {
+    readFile(filePath, (err, buffer) => {
+      if (err) {
+        resolve(false);
+      }
+      const markStr = buffer.toString(
+        'ascii',
+        buffer.length - MARK_TAG.length,
+        buffer.length
+      );
+      resolve(markStr === MARK_TAG);
+    });
+  });
 };
