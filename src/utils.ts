@@ -119,6 +119,7 @@ export const judgeImageIsCompressed = (filePath) => {
     readFile(filePath, (err, buffer) => {
       if (err) {
         resolve(false);
+        return;
       }
       const markStr = buffer.toString(
         'ascii',

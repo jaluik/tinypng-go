@@ -3,9 +3,11 @@ import {
   canHandledImage,
   getFullPath,
   randomRequestOption,
+  markImageBeCompressed,
+  judgeImageIsCompressed,
 } from '../src/utils';
-import fsextra from 'fs-extra';
 import { resolve } from 'path';
+import { createReadStream, createWriteStream, remove } from 'fs-extra';
 
 describe('test findAllImageFile', () => {
   it('should return all image files with path and originSize', (done) => {
@@ -70,5 +72,45 @@ describe('test randomRequestOption', () => {
       option2.headers['X-Forwarded-For']
     );
     expect(option1.hostname).not.toEqual(option2.hostname);
+  });
+});
+
+describe('test randomRequestOption', () => {
+  it('should return random X-Forwarded-For header ', () => {
+    const mockMath = Object.create(global.Math);
+    mockMath.random = () => 0.2;
+    global.Math = mockMath;
+    const option1 = randomRequestOption();
+    mockMath.random = () => 0.6;
+    global.Math = mockMath;
+    const option2 = randomRequestOption();
+    expect(option1.headers['X-Forwarded-For']).not.toEqual(
+      option2.headers['X-Forwarded-For']
+    );
+    expect(option1.hostname).not.toEqual(option2.hostname);
+  });
+});
+
+describe('test markImageBeCompressed and judgeImageIsCompressed', () => {
+  it('should return true after markImageBeCompressed', (done) => {
+    const originPath = resolve(__dirname, './images/test.png');
+    const distPath = resolve(__dirname, './images/test-compressed.png');
+    const wrongPath = resolve(__dirname, './images/test-wrong.png');
+    const ws = createWriteStream(distPath);
+    const rs = createReadStream(originPath);
+    rs.pipe(ws, { end: false });
+    rs.on('end', () => {
+      markImageBeCompressed(ws);
+      Promise.all([
+        judgeImageIsCompressed(originPath),
+        judgeImageIsCompressed(wrongPath),
+        judgeImageIsCompressed(distPath),
+      ]).then((res) => {
+        expect(res[0]).toBeFalsy();
+        expect(res[1]).toBeFalsy();
+        expect(res[2]).toBeTruthy();
+        remove(distPath).then(done);
+      });
+    });
   });
 });
