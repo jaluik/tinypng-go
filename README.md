@@ -50,6 +50,7 @@ tinypng-go -v
 -v, --version          show current version
 -o, --output <output>  set output path
 -m, --max [max]        max async compress tasks(The higher the number, the faster the speed)
+-a, --all              force compress all images(include compressed images)
 -h, --help             show help for command
 ```
 
