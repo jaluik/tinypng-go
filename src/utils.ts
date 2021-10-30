@@ -44,11 +44,8 @@ export const canHandledImage = (fileName: string) => {
   if (!fileName) {
     return false;
   }
-  return (
-    fileName.endsWith('.png') ||
-    fileName.endsWith('.jpg') ||
-    fileName.endsWith('.jpeg')
-  );
+  const name = fileName.toLowerCase();
+  return ['.png', '.jpg', 'jpeg', '.webp'].some((ext) => name.endsWith(ext));
 };
 
 /**
