@@ -1,6 +1,14 @@
 # tinypng-go
 
+English | [中文](README_CN.md)
+
 This is a cli tool to compress image quickly and effectively.
+
+- compress ratio is 50% - 70%
+- support to compress all images in directory recursively
+- support to replace or dump compressed images
+- support to avoid repeat compress
+- support to display compress result
 
 ## QUICK START
 
