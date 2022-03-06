@@ -1,10 +1,12 @@
 # tinypng-go
 
+![GitHub CI](https://github.com/jaluik/tinypng-go/actions/workflows/publish.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/jaluik/vstores/badge.svg?branch=master)](https://coveralls.io/github/jaluik/tinypng-go?branch=master)
+
 English | [中文](README_CN.md)
 
 This is a cli tool to compress image quickly and effectively by using [tinypng](https://tinypng.com/).
 
-- compress ratio is 50% - 70%
+- compress ratio is 50% - 70%å
 - support to compress all images in directory recursively
 - support to replace or dump compressed images
 - support to avoid repeat compress
