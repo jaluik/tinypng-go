@@ -1,6 +1,6 @@
 # tinypng-go
 
-![GitHub CI](https://github.com/jaluik/tinypng-go/actions/workflows/publish.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/jaluik/vstores/badge.svg?branch=master)](https://coveralls.io/github/jaluik/tinypng-go?branch=master)
+![GitHub CI](https://github.com/jaluik/tinypng-go/actions/workflows/publish.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/jaluik/tinypng-go/badge.svg?branch=master)](https://coveralls.io/github/jaluik/tinypng-go?branch=master)
 
 English | [中文](README_CN.md)
 
