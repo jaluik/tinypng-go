@@ -8,7 +8,9 @@
     "dev": "rimraf ./dist && tsc -w  --sourceMap",
     "debug": "./dist/index.js ./images -o images_out -m 20",
     "test": "jest --collectCoverage",
-    "build": "rimraf ./dist && tsc"
+    "build": "rimraf ./dist && tsc",
+    "release": "npm version patch",
+    "postversion": "git push --follow-tags"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
