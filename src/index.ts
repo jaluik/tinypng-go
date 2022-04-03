@@ -18,7 +18,7 @@ const packageJson = require('../package.json');
       file: 'input file path',
     })
     .action((file, options) => {
-      const { output = file, max = 10, all } = options;
+      const { output = file, max = 100, all } = options;
       const originPath = getFullPath(file);
       stat(originPath)
         .then(async (stats) => {

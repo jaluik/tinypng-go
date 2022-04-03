@@ -46,7 +46,7 @@ class TinyPng {
   private failedList: FailedItem[];
   private asyncTaskQueue: AsyncTaskQueue;
 
-  constructor(maxTasks = 10) {
+  constructor(maxTasks = 100) {
     this.pendingList = [];
     this.successList = [];
     this.failedList = [];
