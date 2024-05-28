@@ -11,6 +11,7 @@ This is a cli tool to compress image quickly and effectively by using [tinypng](
 - support to replace or dump compressed images
 - support to avoid repeat compress
 - support to display compress result
+- support '.png', '.jpg', 'jpeg', '.webp'
 
 ## QUICK START
 
